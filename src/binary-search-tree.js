@@ -1,35 +1,33 @@
 const { NotImplementedError, ListNode } = require("../extensions/index.js")
-
 const { Node } = require("../extensions/list-tree.js")
 
 /**
- * Implement simple binary search tree according to task description
- * using Node from extensions
+ * Implementation of a simple binary search tree.
  */
 class BinarySearchTree {
   constructor() {
     this.rootNode = null
   }
-
   root() {
     return this.rootNode
   }
-  add(data) {
-    this.rootNode = addIn(this.rootNode, data)
 
-    function addIn(node, value) {
+  add(data) {
+    this.rootNode = addToTree(this.rootNode, data)
+
+    function addToTree(node, value) {
       if (!node) {
         return new Node(value)
       }
 
-      if (node.data === value) {
+      if (value === node.data) {
         return node
       }
 
       if (value < node.data) {
-        node.left = addIn(node.left, value)
+        node.left = addToTree(node.left, value)
       } else {
-        node.right = addIn(node.right, value)
+        node.right = addToTree(node.right, value)
       }
 
       return node
@@ -43,44 +41,42 @@ class BinarySearchTree {
         return true
       }
 
-      if (data < curNode.data) {
-        curNode = curNode.left
-      } else {
-        curNode = curNode.right
-      }
+      curNode = data < curNode.data ? curNode.left : curNode.right
     }
     return false
   }
 
-  find(data) {}
+  find() {}
 
-  remove(data) {}
+  remove() {}
 
   min() {
-    if (!this.rootNode) {
-      return undefined
+    return findMin(this.rootNode)
+
+    function findMin(node) {
+      while (node && node.left) {
+        node = node.left
+      }
+      return node ? node.data : undefined
     }
-    let curNode = this.rootNode
-    while (curNode.left) {
-      curNode = curNode.left
-    }
-    return curNode.data
   }
 
   max() {
-    if (!this.rootNode) {
-      return
+    return findMax(this.rootNode)
+
+    function findMax(node) {
+      while (node && node.right) {
+        node = node.right
+      }
+      return node ? node.data : undefined
     }
-    let curNode = this.rootNode
-    while (curNode.right) {
-      curNode = curNode.right
-    }
-    return curNode.data
   }
 }
+
+// Example usage
 const tree = new BinarySearchTree()
-console.log(tree.add(12))
-console.log((tree.rootNode.left = 11))
+tree.add(12)
+tree.add(11)
 console.log(tree)
 
 module.exports = {
